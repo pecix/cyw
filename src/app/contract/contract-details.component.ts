@@ -1,7 +1,7 @@
 import { Component, inject, input, computed } from '@angular/core';
 import { NgClass, DatePipe, CurrencyPipe } from '@angular/common';
 import { Router } from '@angular/router';
-import { ContractService, Contract } from './contract.service';
+import { ContractService, Contract } from './service/contract.service';
 
 @Component({
   selector: 'app-contract-details',

@@ -1,6 +1,6 @@
 import { Component, signal, computed } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { ContractService } from './contract.service';
+import { ContractService } from './service/contract.service';
 import { Router } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 
@@ -228,7 +228,7 @@ import { toSignal } from '@angular/core/rxjs-interop';
 export class ContractFormComponent {
   currentStep = signal(1);
   contractForm: FormGroup;
-  
+
   formEvents: any;
   touchedTrigger = signal(0);
 
@@ -260,7 +260,7 @@ export class ContractFormComponent {
   invalidFields = computed(() => {
     this.formEvents();
     this.touchedTrigger();
-    
+
     const isControlInvalid = (path: string) => {
       const c = this.contractForm.get(path);
       return c ? c.invalid && (c.dirty || c.touched) : false;
@@ -307,11 +307,11 @@ export class ContractFormComponent {
     const step = this.currentStep();
     if (step === 1) groupName = 'personalData';
     if (step === 2) groupName = 'addressData';
-    
+
     if (groupName) {
       this.markGroupTouched(groupName);
     }
-    
+
     const validMap = this.stepValidity() as any;
     if (step < 3 && validMap[step]) {
       this.currentStep.update(s => s + 1);
@@ -334,7 +334,7 @@ export class ContractFormComponent {
         ...formValue.contractParams
       };
       this.contractService.addContract(contractData);
-      
+
       this.router.navigate(['/umowy']);
     }
   }

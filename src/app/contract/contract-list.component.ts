@@ -1,6 +1,6 @@
 import { Component, inject } from '@angular/core';
 import { DatePipe, CurrencyPipe } from '@angular/common';
-import { ContractService } from './contract.service';
+import { ContractService } from './service/contract.service';
 import { Router } from '@angular/router';
 
 @Component({

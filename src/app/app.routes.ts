@@ -1,8 +1,8 @@
 import { Routes } from '@angular/router';
-import { ContractFormComponent } from './contract-form.component';
+import { ContractFormComponent } from './contract/contract-form.component';
 import { HomeComponent } from './home.component';
-import { ContractListComponent } from './contract-list.component';
-import { ContractDetailsComponent } from './contract-details.component';
+import { ContractListComponent } from './contract/contract-list.component';
+import { ContractDetailsComponent } from './contract/contract-details.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent, pathMatch: 'full' },

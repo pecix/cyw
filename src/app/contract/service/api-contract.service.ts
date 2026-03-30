@@ -1,9 +1,7 @@
-import { Injectable, signal, Signal, inject } from '@angular/core';
+import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Contract, ContractService } from './contract.service';
-import { environment } from '../environments/environment';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { map, tap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'

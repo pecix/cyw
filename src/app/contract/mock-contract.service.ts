@@ -1,5 +1,5 @@
-import { Injectable, signal, Signal } from '@angular/core';
-import { Contract, ContractService } from './contract.service';
+import { Injectable, signal } from '@angular/core';
+import { Contract, ContractService } from './service/contract.service';
 
 @Injectable({
   providedIn: 'root'
