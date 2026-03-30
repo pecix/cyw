@@ -5,7 +5,6 @@ import { Contract, ContractService } from './contract.service';
   providedIn: 'root'
 })
 export class MockContractService extends ContractService {
-  // Mock data
   private initialContracts: Contract[] = [
     {
       id: '1',
@@ -43,7 +42,6 @@ export class MockContractService extends ContractService {
 
   private contractsSignal = signal<Contract[]>(this.initialContracts);
 
-  // Expose as readonly signal
   override readonly contracts = this.contractsSignal.asReadonly();
 
   override addContract(contractData: Omit<Contract, 'id' | 'createdAt'>) {

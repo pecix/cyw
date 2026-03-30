@@ -14,7 +14,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
         <div class="card-body p-sm-5 p-4">
           <h2 class="text-center mb-5 fw-bold text-primary">Nowa Umowa Cywilnoprawna</h2>
 
-          <!-- Stepper -->
           <div class="position-relative mb-5 d-none d-sm-block">
             <div class="progress" style="height: 4px;">
               <div class="progress-bar bg-primary" role="progressbar" 
@@ -37,13 +36,11 @@ import { toSignal } from '@angular/core/rxjs-interop';
             </div>
           </div>
           
-          <!-- Mobile Stepper -->
           <div class="d-block d-sm-none mb-4 text-center">
             <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">Krok {{ currentStep() }} z 3</span>
           </div>
 
           <form [formGroup]="contractForm" class="mt-sm-5 mt-3 pt-sm-3">
-            <!-- Step 1: Personal Data -->
             @if (currentStep() === 1) {
             <div formGroupName="personalData" class="fade-in">
               <h4 class="mb-4 text-secondary"><i class="bi bi-person me-2"></i>Dane osobowe</h4>
@@ -80,7 +77,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
             </div>
             }
 
-            <!-- Step 2: Address Data -->
             @if (currentStep() === 2) {
             <div formGroupName="addressData" class="fade-in">
               <h4 class="mb-4 text-secondary"><i class="bi bi-house me-2"></i>Dane adresowe</h4>
@@ -117,7 +113,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
             </div>
             }
 
-            <!-- Step 3: Contract Parameters -->
             @if (currentStep() === 3) {
             <div formGroupName="contractParams" class="fade-in">
               <h4 class="mb-4 text-secondary"><i class="bi bi-file-earmark-text me-2"></i>Parametry umowy</h4>
@@ -157,7 +152,6 @@ import { toSignal } from '@angular/core/rxjs-interop';
             </div>
             }
 
-            <!-- Navigation Buttons -->
             <div class="d-flex justify-content-between mt-5 pt-3 border-top">
               <button type="button" class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm text-dark btn-mobile" (click)="prevStep()" [class.invisible]="currentStep() === 1">
                 Wstecz

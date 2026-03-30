@@ -14,7 +14,6 @@ export class ApiContractService extends ContractService {
 
   private contractsSignal = signal<Contract[]>([]);
 
-  // Expose as readonly signal
   override readonly contracts = this.contractsSignal.asReadonly();
 
   constructor() {

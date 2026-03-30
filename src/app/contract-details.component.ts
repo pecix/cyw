@@ -10,20 +10,17 @@ import { ContractService, Contract } from './contract.service';
   template: `
     @if (contract(); as data) {
     <div class="row g-4 fade-in">
-      <!-- Wstecz Action -->
       <div class="col-12 mb-2">
         <button class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm" (click)="goBack()">
           <i class="bi bi-arrow-left me-2"></i>Wróć do listy umów
         </button>
       </div>
 
-      <!-- Main Header -->
       <div class="col-12 mt-0">
         <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
           <div class="bg-primary pt-5 pb-3 px-sm-5 px-4 position-relative">
             <h1 class="text-white fw-bold mb-0 position-relative z-1">{{ data.firstName }} {{ data.lastName }}</h1>
             <p class="text-white-50 fs-5 mt-1 mb-2 position-relative z-1">Podpisana umowa z pracownikiem</p>
-            <!-- Tło deko -->
             <i class="bi bi-person-circle position-absolute text-white opacity-25" style="font-size: 8rem; right: 2rem; top: -1rem;"></i>
           </div>
           <div class="card-body p-sm-5 p-4 bg-light">
@@ -49,7 +46,6 @@ import { ContractService, Contract } from './contract.service';
         </div>
       </div>
 
-      <!-- Dane Osobowe -->
       <div class="col-lg-6">
         <div class="card shadow-sm border-0 rounded-4 h-100">
           <div class="card-body p-sm-5 p-4">
@@ -62,7 +58,6 @@ import { ContractService, Contract } from './contract.service';
               <dt class="col-sm-4 text-muted fw-semibold mt-3 mt-sm-0">Data urodzenia</dt>
               <dd class="col-sm-8">{{ data.birthDate | date:'dd.MM.yyyy' }}</dd>
               
-              <!-- Odstęp -->
               <div class="col-12 my-2"><hr class="text-muted opacity-25"></div>
 
               <dt class="col-sm-4 text-muted fw-semibold text-truncate">Adres korespondencyjny</dt>
@@ -75,7 +70,6 @@ import { ContractService, Contract } from './contract.service';
         </div>
       </div>
 
-      <!-- Parametry umowy -->
       <div class="col-lg-6">
         <div class="card shadow-sm border-0 rounded-4 h-100">
           <div class="card-body p-sm-5 p-4">
@@ -93,7 +87,6 @@ import { ContractService, Contract } from './contract.service';
       </div>
     </div>
     } @else if (contract() === undefined) {
-    <!-- State: Not Found -->
     <div class="card shadow-sm border-0 rounded-4 p-5 text-center mt-5 fade-in">
       <i class="bi bi-search text-muted fs-1 mb-3"></i>
       <h3 class="fw-bold text-secondary">Nie znaleziono umowy</h3>
