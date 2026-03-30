@@ -1,16 +1,21 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 py-3 shadow-sm">
   <div class="container-fluid px-sm-5">
-    <a class="navbar-brand mb-0 h1 fw-bold cursor-pointer" routerLink="/">Portal Pracowniczy</a>
-    <button class="navbar-toggler" type="button" (click)="isMenuOpen.set(!isMenuOpen())" [attr.aria-expanded]="isMenuOpen()" aria-label="Toggle navigation">
+    <a class="navbar-brand mb-0 h1 fw-bold cursor-pointer" routerLink="/">
+      <i class="bi bi-people-fill"></i> Portal Pracowniczy
+    </a>
+    <button class="navbar-toggler" type="button" (click)="isMenuOpen.set(!isMenuOpen())"
+      [attr.aria-expanded]="isMenuOpen()" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" [class.show]="isMenuOpen()" id="navbarNav">
       <ul class="navbar-nav ms-auto font-weight-bold">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/nowa-umowa" routerLinkActive="active" (click)="isMenuOpen.set(false)">Nowa umowa</a>
+          <a class="nav-link" routerLink="/nowa-umowa" routerLinkActive="active" (click)="isMenuOpen.set(false)">Nowa
+            umowa</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/umowy" routerLinkActive="active" (click)="isMenuOpen.set(false)">Podpisane umowy</a>
+          <a class="nav-link" routerLink="/umowy" routerLinkActive="active" (click)="isMenuOpen.set(false)">Podpisane
+            umowy</a>
         </li>
       </ul>
     </div>
