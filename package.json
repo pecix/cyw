@@ -4,6 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
+    "start:mock": "ng serve --configuration=mock",
     "build": "ng build",
     "build:cyw": "ng build --base-href=/cyw/",
     "watch": "ng build --watch --configuration development",
