@@ -6,7 +6,7 @@
     "start": "ng serve",
     "start:mock": "ng serve --configuration=mock",
     "build": "ng build",
-    "build:cyw": "ng build --base-href=/cyw/",
+    "build:cyw": "ng build --base-href=/cyw/ --configuration=mock",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },

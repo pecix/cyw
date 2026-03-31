@@ -1,6 +1,7 @@
 import { Injectable, signal, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Contract, ContractService } from './contract.service';
+import { ContractService } from './contract.service';
+import { Contract } from '../contract';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
