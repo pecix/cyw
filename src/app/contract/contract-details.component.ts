@@ -33,14 +33,30 @@ import { Contract } from './contract';
               <div class="col-md-4 mb-3 mb-md-0">
                 <div class="text-muted text-uppercase fw-bold small">Rodzaj umowy</div>
                 <div class="fs-5">
-                  <span class="badge" [ngClass]="data.contractType === 'zlecenie' ? 'bg-info text-dark' : 'bg-success'">
-                    {{ data.contractType === 'zlecenie' ? 'Umowa Zlecenie' : 'Umowa o Dzieło' }}
+                  <span class="badge" [ngClass]="getBadgeClass(data.contractType)">
+                    {{ getTypeName(data.contractType) }}
                   </span>
                 </div>
               </div>
               <div class="col-md-4">
                 <div class="text-muted text-uppercase fw-bold small">Stawka brutto</div>
                 <div class="fs-4 fw-bold text-success">{{ data.rate | currency:'PLN':'symbol':'1.2-2' }}</div>
+              </div>
+              <div class="col-12 mt-4 pt-3 border-top">
+                <div class="row">
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="text-muted text-uppercase fw-bold small">Stanowisko</div>
+                    <div class="fs-5">{{ data.position }}</div>
+                  </div>
+                  <div class="col-md-4 mb-3 mb-md-0">
+                    <div class="text-muted text-uppercase fw-bold small">Dodatek funkcyjny</div>
+                    <div class="fs-5">{{ data.functionalAllowance | currency:'PLN':'symbol':'1.2-2' }}</div>
+                  </div>
+                  <div class="col-md-4">
+                    <div class="text-muted text-uppercase fw-bold small">Dodatek stażowy</div>
+                    <div class="fs-5">{{ data.seniorityAllowance }}%</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -63,9 +79,14 @@ import { Contract } from './contract';
 
               <dt class="col-sm-4 text-muted fw-semibold text-truncate">Adres korespondencyjny</dt>
               <dd class="col-sm-8">
-                ul. {{ data.street }} {{ data.houseNumber }}<br>
+                ul. {{ data.street }} {{ data.houseNumber }} {{ data.apartmentNumber ? '/' + data.apartmentNumber : '' }}<br>
                 {{ data.zipCode }} {{ data.city }}
               </dd>
+              
+              <div class="col-12 my-2"><hr class="text-muted opacity-25"></div>
+
+              <dt class="col-sm-4 text-muted fw-semibold mt-3 mt-sm-0">Konto bankowe</dt>
+              <dd class="col-sm-8">{{ data.bankAccount }}</dd>
             </dl>
           </div>
         </div>
@@ -77,7 +98,18 @@ import { Contract } from './contract';
             <h4 class="fw-bold text-secondary mb-4 border-bottom pb-3"><i class="bi bi-file-earmark-check text-success me-2"></i>Szczegóły kontraktu</h4>
             
             <dl class="row">
-              <dt class="col-sm-5 text-muted fw-semibold">Data rozpoczęcia</dt>
+              <dt class="col-sm-5 text-muted fw-semibold">Data zawarcia</dt>
+              <dd class="col-sm-7 fw-bold">{{ data.conclusionDate | date:'dd.MM.yyyy' }}</dd>
+
+              <dt class="col-sm-5 text-muted fw-semibold mt-3 mt-sm-0">Wymiar etatu</dt>
+              <dd class="col-sm-7">{{ data.workingTime }}</dd>
+
+              <dt class="col-sm-5 text-muted fw-semibold mt-3 mt-sm-0">Miejsce pracy</dt>
+              <dd class="col-sm-7">{{ data.workplace }}</dd>
+
+              <div class="col-12 my-2"><hr class="text-muted opacity-25"></div>
+
+              <dt class="col-sm-5 text-muted fw-semibold mt-3 mt-sm-0">Data rozpoczęcia</dt>
               <dd class="col-sm-7 fw-bold">{{ data.startDate | date:'dd.MM.yyyy' }}</dd>
               
               <dt class="col-sm-5 text-muted fw-semibold mt-3 mt-sm-0">Data zakończenia</dt>
@@ -119,5 +151,29 @@ export class ContractDetailsComponent {
 
   goBack() {
     this.router.navigate(['/umowy']);
+  }
+
+  getTypeName(type: string): string {
+    const types: Record<string, string> = {
+      'zlecenie': 'Zlecenie',
+      'dzielo': 'O Dzieło',
+      'czas_okreslony': 'Czas Określony',
+      'czas_nieokreslony': 'Czas Nieokreślony',
+      'zastepstwo': 'Zastępstwo',
+      'kontrakt': 'Kontrakt'
+    };
+    return types[type] || type;
+  }
+
+  getBadgeClass(type: string): string {
+    const classes: Record<string, string> = {
+      'zlecenie': 'bg-info text-dark',
+      'dzielo': 'bg-success',
+      'czas_okreslony': 'bg-primary',
+      'czas_nieokreslony': 'bg-secondary',
+      'zastepstwo': 'bg-warning text-dark',
+      'kontrakt': 'bg-danger'
+    };
+    return classes[type] || 'bg-light text-dark';
   }
 }

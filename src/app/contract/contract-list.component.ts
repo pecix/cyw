@@ -1,12 +1,12 @@
 import { Component, inject } from '@angular/core';
-import { DatePipe, CurrencyPipe } from '@angular/common';
+import { DatePipe, CurrencyPipe, NgClass } from '@angular/common';
 import { ContractService } from './service/contract.service';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contract-list',
   standalone: true,
-  imports: [DatePipe, CurrencyPipe],
+  imports: [DatePipe, CurrencyPipe, NgClass],
   template: `
     <div class="card shadow-lg border-0 rounded-4 fade-in">
       <div class="card-body p-sm-5 p-4">
@@ -21,7 +21,7 @@ import { Router } from '@angular/router';
               <tr>
                 <th scope="col">Data dodania</th>
                 <th scope="col">Wykonawca</th>
-                <th scope="col">Rodzaj umowy</th>
+                <th scope="col">Stanowisko / Rodzaj</th>
                 <th scope="col">Okres trwania</th>
                 <th scope="col" class="text-end">Stawka brutto</th>
                 <th scope="col"></th>
@@ -36,8 +36,9 @@ import { Router } from '@angular/router';
                   <div class="text-muted small">PESEL: {{ contract.pesel }}</div>
                 </td>
                 <td>
-                  <span class="badge" [class.bg-info]="contract.contractType === 'zlecenie'" [class.text-dark]="contract.contractType === 'zlecenie'" [class.bg-success]="contract.contractType !== 'zlecenie'">
-                    {{ contract.contractType === 'zlecenie' ? 'Zlecenie' : 'O Dzieło' }}
+                  <div class="fw-semibold">{{ contract.position }}</div>
+                  <span class="badge" [ngClass]="getBadgeClass(contract.contractType)">
+                    {{ getTypeName(contract.contractType) }}
                   </span>
                 </td>
                 <td>
@@ -94,5 +95,29 @@ export class ContractListComponent {
 
   viewDetails(id: string) {
     this.router.navigate(['/umowy', id]);
+  }
+
+  getTypeName(type: string): string {
+    const types: Record<string, string> = {
+      'zlecenie': 'Zlecenie',
+      'dzielo': 'O Dzieło',
+      'czas_okreslony': 'Czas Określony',
+      'czas_nieokreslony': 'Czas Nieokreślony',
+      'zastepstwo': 'Zastępstwo',
+      'kontrakt': 'Kontrakt'
+    };
+    return types[type] || type;
+  }
+
+  getBadgeClass(type: string): string {
+    const classes: Record<string, string> = {
+      'zlecenie': 'bg-info text-dark',
+      'dzielo': 'bg-success',
+      'czas_okreslony': 'bg-primary',
+      'czas_nieokreslony': 'bg-secondary',
+      'zastepstwo': 'bg-warning text-dark',
+      'kontrakt': 'bg-danger'
+    };
+    return classes[type] || 'bg-light text-dark';
   }
 }

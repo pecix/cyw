@@ -7,6 +7,9 @@ import { environment } from '../environments/environment';
 import { ContractService } from './contract/service/contract.service';
 import { MockContractService } from './contract/service/mock-contract.service';
 import { ApiContractService } from './contract/service/api-contract.service';
+import { DraftService } from './draft/service/draft.service';
+import { MockDraftService } from './draft/service/mock-draft.service';
+import { ApiDraftService } from './draft/service/api-draft.service';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -16,6 +19,10 @@ export const appConfig: ApplicationConfig = {
     {
       provide: ContractService,
       useClass: environment.useMock ? MockContractService : ApiContractService
+    },
+    {
+      provide: DraftService,
+      useClass: environment.useMock ? MockDraftService : ApiDraftService
     }
   ]
 };
