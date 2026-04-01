@@ -5,7 +5,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { DraftService } from '../draft/service/draft.service';
-
+import { EmployeeService } from '../employee/service/employee.service';
 @Component({
   selector: 'app-contract-form',
   standalone: true,
@@ -378,6 +378,7 @@ export class ContractFormComponent {
     private fb: FormBuilder,
     private contractService: ContractService,
     private draftService: DraftService,
+    private employeeService: EmployeeService,
     private router: Router,
     private route: ActivatedRoute
   ) {
@@ -550,6 +551,12 @@ export class ContractFormComponent {
         ...formValue.contractConditions,
         ...formValue.remunerationData
       };
+      
+      this.employeeService.addOrUpdateEmployee({
+        ...formValue.personalData,
+        ...formValue.addressData
+      });
+      
       this.contractService.addContract(contractData);
 
       if (this.currentDraftId) {
