@@ -24,12 +24,12 @@ import { Router } from '@angular/router';
                 <th scope="col">Stanowisko / Rodzaj</th>
                 <th scope="col">Okres trwania</th>
                 <th scope="col" class="text-end">Stawka brutto</th>
-                <th scope="col"></th>
+                <th scope="col" class="text-end">Akcje</th>
               </tr>
             </thead>
             <tbody>
               @for (contract of contracts(); track contract.id) {
-              <tr (click)="viewDetails(contract.id)" class="contract-row">
+              <tr class="contract-row">
                 <td class="text-muted"><small>{{ contract.createdAt | date:'dd.MM.yyyy' }}</small></td>
                 <td>
                   <div class="fw-bold">{{ contract.firstName }} {{ contract.lastName }}</div>
@@ -79,7 +79,6 @@ import { Router } from '@angular/router';
       padding: 1rem 0.75rem;
     }
     .contract-row { 
-      cursor: pointer; 
       transition: background-color 0.2s; 
     }
     .contract-row:hover { 

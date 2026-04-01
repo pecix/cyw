@@ -1,5 +1,5 @@
 import { Component, inject, input, computed } from '@angular/core';
-import { NgClass, DatePipe, CurrencyPipe } from '@angular/common';
+import { DatePipe, CurrencyPipe, NgClass, Location } from '@angular/common';
 import { Router } from '@angular/router';
 import { ContractService } from './service/contract.service';
 import { Contract } from './contract';
@@ -138,6 +138,7 @@ import { Contract } from './contract';
 export class ContractDetailsComponent {
   private router = inject(Router);
   private contractService = inject(ContractService);
+  private location = inject(Location);
 
   readonly id = input<string>();
 
@@ -147,7 +148,7 @@ export class ContractDetailsComponent {
   });
 
   goBack() {
-    this.router.navigate(['/umowy']);
+    this.location.back();
   }
 
   getTypeName(type: string): string {

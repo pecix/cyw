@@ -77,7 +77,7 @@ import { EmployeeService } from './service/employee.service';
     @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     .table > :not(caption) > * > * { padding: 1rem 0.5rem; }
     .table tbody tr { transition: all 0.2s ease; cursor: default; }
-    .table tbody tr:hover { background-color: rgba(13, 110, 253, 0.02); transform: translateY(-2px); box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .table tbody tr:hover { background-color: rgba(13, 110, 253, 0.02); }
   `]
 })
 export class EmployeeListComponent {
