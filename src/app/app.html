@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 py-3 shadow-sm">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4 py-3 shadow-sm sticky-top z-3" style="z-index: 2000;">
   <div class="container-fluid px-sm-5">
     <a class="navbar-brand mb-0 h1 fw-bold cursor-pointer" routerLink="/">
       <i class="bi bi-people-fill"></i> Portal Pracowniczy
@@ -10,19 +10,24 @@
     <div class="collapse navbar-collapse" [class.show]="isMenuOpen()" id="navbarNav">
       <ul class="navbar-nav ms-auto font-weight-bold">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/nowa-umowa" routerLinkActive="active" (click)="isMenuOpen.set(false)">Nowa
-            umowa</a>
+          <a class="nav-link" routerLink="/nowa-umowa" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+            <i class="bi bi-file-earmark-plus me-1"></i>Nowa umowa
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/umowy" routerLinkActive="active" (click)="isMenuOpen.set(false)">Podpisane
-            umowy</a>
+          <a class="nav-link" routerLink="/umowy" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+            <i class="bi bi-file-earmark-check me-1"></i>Podpisane umowy
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/drafts" routerLinkActive="active" (click)="isMenuOpen.set(false)">Szkice
-            umów</a>
+          <a class="nav-link" routerLink="/drafts" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+            <i class="bi bi-pencil-square me-1"></i>Szkice umów
+          </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/pracownicy" routerLinkActive="active" (click)="isMenuOpen.set(false)">Pracownicy</a>
+          <a class="nav-link" routerLink="/pracownicy" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+            <i class="bi bi-person-vcard me-1"></i>Pracownicy
+          </a>
         </li>
       </ul>
     </div>
