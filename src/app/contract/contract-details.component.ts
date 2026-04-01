@@ -13,7 +13,7 @@ import { Contract } from './contract';
     <div class="row g-4 fade-in">
       <div class="col-12 mb-2 d-flex justify-content-between align-items-center d-print-none">
         <button class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow" (click)="goBack()">
-          <i class="bi bi-arrow-left me-2"></i>Wróć do listy umów
+          <i class="bi bi-arrow-left me-2"></i>Wróć 
         </button>
         <button class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow" (click)="printContract()">
           <i class="bi bi-printer me-2"></i>Drukuj umowę

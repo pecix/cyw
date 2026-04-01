@@ -15,7 +15,7 @@ import { EmployeeHistoryEntry } from './employee';
     <div class="row g-4 fade-in">
       <div class="col-12 mb-2">
         <button class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm" (click)="goBack()">
-          <i class="bi bi-arrow-left me-2"></i>Wróć do listy pracowników
+          <i class="bi bi-arrow-left me-2"></i>Wróć
         </button>
       </div>
 
