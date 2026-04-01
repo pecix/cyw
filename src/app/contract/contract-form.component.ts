@@ -241,13 +241,6 @@ import { DraftService } from '../draft/service/draft.service';
                         <div class="invalid-feedback">Wartość musi być dodatnia</div>
                       </div>
                     </div>
-                    <div class="col-md-12">
-                      <div class="form-floating text-muted">
-                        <input formControlName="bankAccount" class="form-control bg-light border-0" id="bankAccount" placeholder="Konto bankowe" [class.is-invalid]="invalidFields().bankAccount" />
-                        <label for="bankAccount">Numer konta bankowego (26 cyfr)</label>
-                        <div class="invalid-feedback">Wymagany format to 26 cyfr, bez spacji</div>
-                      </div>
-                    </div>
                   </div>
                 </div>
                 }
@@ -299,7 +292,6 @@ import { DraftService } from '../draft/service/draft.service';
                           + {{ contractForm.value.remunerationData?.seniorityAllowance }}% dodatku stażowego<br>
                           + {{ contractForm.value.remunerationData?.functionalAllowance | currency:'PLN':'symbol':'1.2-2' }} dodatku funkcyjnego
                         </div>
-                        <div class="text-muted font-monospace"><i class="bi bi-bank me-2"></i>{{ contractForm.value.remunerationData?.bankAccount }}</div>
                       </div>
                     </div>
                   </div>
@@ -418,7 +410,6 @@ export class ContractFormComponent {
         rate: [null as any, [Validators.required, Validators.min(0)]],
         seniorityAllowance: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
         functionalAllowance: [0, [Validators.required, Validators.min(0)]],
-        bankAccount: ['', [Validators.pattern(/^[0-9]{26}$/)]],
       })
     });
 
@@ -503,7 +494,6 @@ export class ContractFormComponent {
       rate: isControlInvalid('remunerationData.rate'),
       seniorityAllowance: isControlInvalid('remunerationData.seniorityAllowance'),
       functionalAllowance: isControlInvalid('remunerationData.functionalAllowance'),
-      bankAccount: isControlInvalid('remunerationData.bankAccount'),
     };
   });
 

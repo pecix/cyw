@@ -12,7 +12,7 @@ import { Router } from '@angular/router';
       <div class="card-body p-sm-5 p-4">
         <div class="d-flex justify-content-between align-items-center mb-4">
           <h2 class="fw-bold text-primary mb-0"><i class="bi bi-pencil-square me-2"></i>Szkice umów</h2>
-          <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">{{ drafts().length }} w sumie</span>
+          <span class="badge bg-primary rounded-pill px-3 py-2 fs-6">{{ drafts().length }} łącznie</span>
         </div>
 
         <div class="table-responsive">

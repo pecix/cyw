@@ -25,7 +25,6 @@ export class MockContractService extends ContractService {
       rate: 5000,
       seniorityAllowance: 10,
       functionalAllowance: 500,
-      bankAccount: '12345678901234567890123456',
       startDate: '2026-04-01',
       endDate: '2026-12-31',
       createdAt: new Date().toISOString()
@@ -48,7 +47,6 @@ export class MockContractService extends ContractService {
       rate: 8500,
       seniorityAllowance: 0,
       functionalAllowance: 0,
-      bankAccount: '09876543210987654321098765',
       startDate: '2026-05-01',
       endDate: '2026-08-31',
       createdAt: new Date(Date.now() - 86400000).toISOString()

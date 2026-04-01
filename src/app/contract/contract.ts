@@ -17,7 +17,6 @@ export interface Contract {
     rate: number;
     seniorityAllowance: number;
     functionalAllowance: number;
-    bankAccount: string;
     startDate: string;
     endDate: string;
     createdAt: string;

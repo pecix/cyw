@@ -84,9 +84,6 @@ import { Contract } from './contract';
               </dd>
               
               <div class="col-12 my-2"><hr class="text-muted opacity-25"></div>
-
-              <dt class="col-sm-4 text-muted fw-semibold mt-3 mt-sm-0">Konto bankowe</dt>
-              <dd class="col-sm-8">{{ data.bankAccount }}</dd>
             </dl>
           </div>
         </div>
