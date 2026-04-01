@@ -7,7 +7,7 @@ import { Employee } from '../employee';
 export abstract class EmployeeService {
   abstract readonly employees: Signal<Employee[]>;
 
-  abstract addOrUpdateEmployee(employeeData: Omit<Employee, 'createdAt'>): void;
+  abstract addOrUpdateEmployee(employeeData: Omit<Employee, 'createdAt' | 'history'>): void;
 
   abstract getEmployeeByPesel(pesel: string): Employee | undefined;
 }

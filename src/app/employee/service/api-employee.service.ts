@@ -25,7 +25,7 @@ export class ApiEmployeeService extends EmployeeService {
       .subscribe(data => this.employeesSignal.set(data));
   }
 
-  override addOrUpdateEmployee(employeeData: Omit<Employee, 'createdAt'>) {
+  override addOrUpdateEmployee(employeeData: Omit<Employee, 'createdAt' | 'history'>) {
     this.http.post<Employee>(this.apiUrl, employeeData)
       .subscribe(savedEmployee => {
         this.employeesSignal.update(employees => {

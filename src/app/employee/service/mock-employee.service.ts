@@ -1,6 +1,6 @@
 import { Injectable, signal } from '@angular/core';
 import { EmployeeService } from './employee.service';
-import { Employee } from '../employee';
+import { Employee, EmployeeHistoryEntry } from '../employee';
 
 @Injectable({
   providedIn: 'root'
@@ -35,15 +35,41 @@ export class MockEmployeeService extends EmployeeService {
 
   override readonly employees = this.employeesSignal.asReadonly();
 
-  override addOrUpdateEmployee(employeeData: Omit<Employee, 'createdAt'>) {
+  override addOrUpdateEmployee(employeeData: Omit<Employee, 'createdAt' | 'history'>) {
     this.employeesSignal.update(employees => {
       const existingIndex = employees.findIndex(e => e.pesel === employeeData.pesel);
       
       if (existingIndex !== -1) {
+        const existing = employees[existingIndex];
+        const diffs: EmployeeHistoryEntry[] = [];
+        const now = new Date().toISOString();
+
+        if (employeeData.bankAccount !== undefined && existing.bankAccount !== employeeData.bankAccount) {
+          diffs.push({
+            date: now,
+            field: 'Konto bankowe',
+            oldValue: existing.bankAccount || 'Brak',
+            newValue: employeeData.bankAccount || 'Brak'
+          });
+        }
+
+        const oldAddress = `${existing.street} ${existing.houseNumber}${existing.apartmentNumber ? '/' + existing.apartmentNumber : ''}, ${existing.zipCode} ${existing.city}`;
+        const newAddress = `${employeeData.street} ${employeeData.houseNumber}${employeeData.apartmentNumber ? '/' + employeeData.apartmentNumber : ''}, ${employeeData.zipCode} ${employeeData.city}`;
+
+        if (oldAddress !== newAddress) {
+          diffs.push({
+            date: now,
+            field: 'Adres korespondencyjny',
+            oldValue: oldAddress,
+            newValue: newAddress
+          });
+        }
+
         const updatedEmployees = [...employees];
         updatedEmployees[existingIndex] = {
-          ...employees[existingIndex],
-          ...employeeData
+          ...existing,
+          ...employeeData,
+          history: [...(existing.history || []), ...diffs]
         };
         return updatedEmployees;
       } else {

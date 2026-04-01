@@ -11,9 +11,12 @@ import { Contract } from './contract';
   template: `
     @if (contract(); as data) {
     <div class="row g-4 fade-in">
-      <div class="col-12 mb-2">
+      <div class="col-12 mb-2 d-flex justify-content-between align-items-center d-print-none">
         <button class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow" (click)="goBack()">
           <i class="bi bi-arrow-left me-2"></i>Wróć do listy umów
+        </button>
+        <button class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow" (click)="printContract()">
+          <i class="bi bi-printer me-2"></i>Drukuj umowę do PDF
         </button>
       </div>
 
@@ -133,6 +136,30 @@ import { Contract } from './contract';
       from { opacity: 0; transform: translateY(10px); }
       to { opacity: 1; transform: translateY(0); }
     }
+    @media print {
+      :host {
+        display: block;
+        width: 100%;
+      }
+      .card {
+        border: none !important;
+        box-shadow: none !important;
+      }
+      .bg-primary {
+        background-color: var(--bs-primary) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .bg-light {
+        background-color: var(--bs-light) !important;
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+      .badge {
+        -webkit-print-color-adjust: exact;
+        print-color-adjust: exact;
+      }
+    }
   `]
 })
 export class ContractDetailsComponent {
@@ -149,6 +176,10 @@ export class ContractDetailsComponent {
 
   goBack() {
     this.location.back();
+  }
+
+  printContract() {
+    window.print();
   }
 
   getTypeName(type: string): string {
