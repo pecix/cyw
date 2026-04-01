@@ -138,7 +138,7 @@ import { EmployeeHistoryEntry } from './employee';
             
             <div class="timeline px-2">
               @for (entry of getSortedHistory(data.history); track entry.date + entry.field) {
-                <div class="timeline-item pb-3 mb-3 border-bottom" style="border-style: dashed !important; border-color: #dee2e6 !important;">
+                <div class="timeline-item p-3 mb-3 border" style="border-color: #dee2e6 !important;">
                    <div class="d-flex justify-content-between align-items-center mb-1">
                      <span class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill"><i class="bi bi-calendar3 me-1"></i>{{ entry.date | date:'dd.MM.yyyy HH:mm' }}</span>
                    </div>

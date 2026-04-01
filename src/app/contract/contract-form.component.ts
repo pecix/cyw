@@ -6,12 +6,22 @@ import { toSignal } from '@angular/core/rxjs-interop';
 import { CurrencyPipe, DatePipe } from '@angular/common';
 import { DraftService } from '../draft/service/draft.service';
 import { EmployeeService } from '../employee/service/employee.service';
+
+interface AddressItem {
+  street: string;
+  houseNumber: string;
+  apartmentNumber?: string;
+  zipCode: string;
+  city: string;
+  source: string;
+}
+
 @Component({
   selector: 'app-contract-form',
   standalone: true,
   imports: [ReactiveFormsModule, CurrencyPipe, DatePipe],
   template: `
-    <div class="container-fluid py-5" style="max-width: 1200px;">
+    <div class="container-fluid fade-in" style="max-width: 1200px;">
       <div class="row g-4">
         <!-- Sidebar Navigation -->
         <div class="col-lg-3 col-md-4">
@@ -103,6 +113,39 @@ import { EmployeeService } from '../employee/service/employee.service';
 
                 <!-- STEP 2: Dane adresowe -->
                 @if (currentStep() === 2) {
+                <div class="fade-in">
+                  @if (availableAddresses().length > 0) {
+                  <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-sm btn-outline-primary rounded-pill px-3 shadow-sm" (click)="showAddressSelector.set(!showAddressSelector())">
+                      <i class="bi me-1" [class.bi-clock-history]="!showAddressSelector()" [class.bi-x-lg]="showAddressSelector()"></i>
+                      {{ showAddressSelector() ? 'Anuluj wybór' : 'Wybierz poprzedni adres z historii' }}
+                    </button>
+                  </div>
+                  
+                  @if (showAddressSelector()) {
+                    <div class="row g-3 mb-4 fade-in">
+                       <div class="col-12">
+                          <label class="form-label text-muted small fw-bold mb-2">Znalezione adresy powiązane z tym pracownikiem:</label>
+                          <div class="list-group list-group-flush border rounded-3 overflow-hidden shadow-sm">
+                            @for (addr of availableAddresses(); track addr.street + addr.houseNumber + addr.zipCode + addr.city) {
+                              <button type="button" class="list-group-item list-group-item-action py-3 d-flex justify-content-between align-items-center" (click)="selectAddress(addr)">
+                                <div>
+                                  <div class="fw-semibold text-dark mb-1">
+                                    <i class="bi bi-geo-alt text-primary opacity-75 me-2"></i>ul. {{ addr.street }} {{ addr.houseNumber }}{{ addr.apartmentNumber ? '/' + addr.apartmentNumber : '' }}
+                                  </div>
+                                  <small class="text-muted ms-4">{{ addr.zipCode }} {{ addr.city }}</small>
+                                </div>
+                                <span class="badge bg-light text-primary border border-primary border-opacity-25 rounded-pill shadow-sm px-3 py-2" style="font-size: 0.75rem;">
+                                  {{ addr.source }}
+                                </span>
+                              </button>
+                            }
+                          </div>
+                      </div>
+                    </div>
+                  }
+                  }
+
                 <div formGroupName="addressData" class="fade-in">
                   <div class="row g-4">
                     <div class="col-md-8">
@@ -141,6 +184,7 @@ import { EmployeeService } from '../employee/service/employee.service';
                       </div>
                     </div>
                   </div>
+                </div>
                 </div>
                 }
 
@@ -373,6 +417,101 @@ export class ContractFormComponent {
   formEvents: any;
   touchedTrigger = signal(0);
   currentDraftId: string | null = null;
+  showAddressSelector = signal(false);
+
+  availableAddresses = computed(() => {
+    this.formEvents();
+    const peselControl = this.contractForm?.get('personalData.pesel');
+    if (!peselControl) return [];
+    const pesel = peselControl.value;
+    if (!pesel || pesel.length !== 11) return [];
+
+    const employee = this.employeeService.getEmployeeByPesel(pesel);
+    const contracts = this.contractService.contracts().filter(c => c.pesel === pesel);
+    const addresses: AddressItem[] = [];
+
+    if (employee) {
+      addresses.push({
+         street: employee.street,
+         houseNumber: employee.houseNumber,
+         apartmentNumber: employee.apartmentNumber,
+         zipCode: employee.zipCode,
+         city: employee.city,
+         source: 'Obecny adres'
+      });
+
+      employee.history?.filter(h => h.field === 'Adres korespondencyjny').forEach(h => {
+         [h.oldValue, h.newValue].forEach(val => {
+            if (val) {
+               const parsed = this.parseAddressString(val as string);
+               if (parsed && parsed.street && parsed.city) {
+                  addresses.push({ ...parsed as any, source: `Z historii zmian` });
+               }
+            }
+         });
+      });
+    }
+
+    contracts.forEach(c => {
+       addresses.push({
+          street: c.street,
+          houseNumber: c.houseNumber,
+          apartmentNumber: c.apartmentNumber,
+          zipCode: c.zipCode,
+          city: c.city,
+          source: `Poprzednia umowa (${c.position})`
+       });
+    });
+
+    const unique = new Map<string, AddressItem>();
+    addresses.forEach(a => {
+       const key = `${a.street?.trim().toLowerCase()}|${a.houseNumber?.trim().toLowerCase()}|${a.apartmentNumber?.trim().toLowerCase() || ''}|${a.zipCode?.trim().toLowerCase()}|${a.city?.trim().toLowerCase()}`;
+       if (a.street && a.city && !unique.has(key)) {
+          unique.set(key, a);
+       }
+    });
+
+    return Array.from(unique.values());
+  });
+
+  parseAddressString(addressStr: string): Partial<AddressItem> | null {
+    try {
+       const str = addressStr.replace('ul. ', '').trim();
+       const parts = str.split(', ');
+       if (parts.length !== 2) return null;
+       const streetAndNumber = parts[0];
+       const zipAndCity = parts[1];
+
+       const zipCode = zipAndCity.substring(0, 6);
+       const city = zipAndCity.substring(7);
+
+       const lastSpaceIdx = streetAndNumber.lastIndexOf(' ');
+       const street = streetAndNumber.substring(0, lastSpaceIdx);
+       const numbers = streetAndNumber.substring(lastSpaceIdx + 1);
+
+       let houseNumber = numbers;
+       let apartmentNumber = undefined;
+       if (numbers.includes('/')) {
+          const nParts = numbers.split('/');
+          houseNumber = nParts[0];
+          apartmentNumber = nParts[1];
+       }
+       return { street, houseNumber, apartmentNumber, zipCode, city };
+    } catch(e) {
+       return null;
+    }
+  }
+
+  selectAddress(address: AddressItem) {
+    this.contractForm.get('addressData')?.patchValue({
+        street: address.street,
+        houseNumber: address.houseNumber,
+        apartmentNumber: address.apartmentNumber || '',
+        zipCode: address.zipCode,
+        city: address.city
+    });
+    this.showAddressSelector.set(false);
+  }
 
   constructor(
     private fb: FormBuilder,
@@ -420,6 +559,20 @@ export class ContractFormComponent {
       const birthDate = this.extractBirthDateFromPesel(pesel);
       if (birthDate) {
         this.contractForm.get('personalData.birthDate')?.setValue(birthDate, { emitEvent: false });
+      }
+      
+      if (pesel && pesel.length === 11) {
+        const employee = this.employeeService.getEmployeeByPesel(pesel);
+        if (employee) {
+          const fnControl = this.contractForm.get('personalData.firstName');
+          const lnControl = this.contractForm.get('personalData.lastName');
+          if (!fnControl?.value) {
+            fnControl?.setValue(employee.firstName, { emitEvent: false });
+          }
+          if (!lnControl?.value) {
+            lnControl?.setValue(employee.lastName, { emitEvent: false });
+          }
+        }
       }
     });
 

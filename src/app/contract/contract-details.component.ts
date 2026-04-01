@@ -16,7 +16,7 @@ import { Contract } from './contract';
           <i class="bi bi-arrow-left me-2"></i>Wróć do listy umów
         </button>
         <button class="btn btn-primary px-4 py-2 rounded-pill fw-semibold shadow" (click)="printContract()">
-          <i class="bi bi-printer me-2"></i>Drukuj umowę do PDF
+          <i class="bi bi-printer me-2"></i>Drukuj umowę
         </button>
       </div>
 
