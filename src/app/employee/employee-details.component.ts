@@ -39,43 +39,36 @@ import { EmployeeHistoryEntry } from './employee';
               </div>
               <div class="col-md-6 col-sm-12 mb-3">
                 <div class="text-muted text-uppercase fw-bold small mb-2 d-flex justify-content-between align-items-center">
-                  <span>Adres korespondencyjny / Konto bankowe</span>
-                  @if (!isEditing()) {
-                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" (click)="toggleEdit()">
-                      <i class="bi bi-pencil me-1"></i>Edytuj dane
+                  <span>Adres korespondencyjny</span>
+                  @if (!isEditingAddress()) {
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" (click)="toggleEditAddress()">
+                      <i class="bi bi-pencil me-1"></i>Edytuj adres
                     </button>
                   }
                 </div>
                 
-                @if (isEditing()) {
-                  <form [formGroup]="editForm" class="mt-2 bg-white p-3 rounded-4 shadow-sm border border-primary border-opacity-25 fade-in">
+                @if (isEditingAddress()) {
+                  <form [formGroup]="addressForm" class="mt-2 bg-white p-3 rounded-4 shadow-sm border border-primary border-opacity-25 fade-in">
                     <div class="row g-2">
                        <div class="col-md-8">
-                         <input formControlName="street" class="form-control form-control-sm bg-light" placeholder="Ulica" [class.is-invalid]="editForm.get('street')?.invalid && editForm.get('street')?.touched">
+                         <input formControlName="street" class="form-control form-control-sm bg-light" placeholder="Ulica" [class.is-invalid]="addressForm.get('street')?.invalid && addressForm.get('street')?.touched">
                        </div>
                        <div class="col-md-2">
-                         <input formControlName="houseNumber" class="form-control form-control-sm bg-light" placeholder="Nr" [class.is-invalid]="editForm.get('houseNumber')?.invalid && editForm.get('houseNumber')?.touched">
+                         <input formControlName="houseNumber" class="form-control form-control-sm bg-light" placeholder="Nr" [class.is-invalid]="addressForm.get('houseNumber')?.invalid && addressForm.get('houseNumber')?.touched">
                        </div>
                        <div class="col-md-2">
                          <input formControlName="apartmentNumber" class="form-control form-control-sm bg-light" placeholder="Lok.">
                        </div>
                        <div class="col-md-4">
-                         <input formControlName="zipCode" class="form-control form-control-sm bg-light" placeholder="Kod pocztowy" [class.is-invalid]="editForm.get('zipCode')?.invalid && editForm.get('zipCode')?.touched">
+                         <input formControlName="zipCode" class="form-control form-control-sm bg-light" placeholder="Kod pocztowy" [class.is-invalid]="addressForm.get('zipCode')?.invalid && addressForm.get('zipCode')?.touched">
                        </div>
                        <div class="col-md-8">
-                         <input formControlName="city" class="form-control form-control-sm bg-light" placeholder="Miejscowość" [class.is-invalid]="editForm.get('city')?.invalid && editForm.get('city')?.touched">
-                       </div>
-                       <div class="col-12 mt-3 pt-2 border-top dashed">
-                         <label class="form-label small fw-bold text-secondary mb-1">Konto bankowe <span class="fw-normal text-muted fst-italic">(opcjonalnie)</span></label>
-                         <input formControlName="bankAccount" class="form-control form-control-sm bg-light font-monospace" placeholder="Wpisz 26 cyfr bez spacji" [class.is-invalid]="editForm.get('bankAccount')?.invalid && editForm.get('bankAccount')?.touched">
-                         @if (editForm.get('bankAccount')?.invalid) {
-                             <div class="invalid-feedback" style="font-size: 0.75rem;">Podaj dokładnie 26 cyfr.</div>
-                         }
+                         <input formControlName="city" class="form-control form-control-sm bg-light" placeholder="Miejscowość" [class.is-invalid]="addressForm.get('city')?.invalid && addressForm.get('city')?.touched">
                        </div>
                        <div class="col-12 mt-3 d-flex gap-2 justify-content-end">
-                         <button type="button" class="btn btn-sm btn-light rounded-pill px-3" (click)="toggleEdit()">Anuluj</button>
-                         <button type="button" class="btn btn-sm btn-primary rounded-pill px-4 shadow-sm" (click)="saveChanges()" [disabled]="editForm.invalid">
-                            <i class="bi bi-save me-1"></i>Zapisz zmiany
+                         <button type="button" class="btn btn-sm btn-light rounded-pill px-3" (click)="toggleEditAddress()">Anuluj</button>
+                         <button type="button" class="btn btn-sm btn-primary rounded-pill px-4 shadow-sm" (click)="saveAddress()" [disabled]="addressForm.invalid">
+                            <i class="bi bi-save me-1"></i>Zapisz adres
                          </button>
                        </div>
                     </div>
@@ -85,6 +78,36 @@ import { EmployeeHistoryEntry } from './employee';
                     <i class="bi bi-geo-alt text-muted me-2"></i>ul. {{ data.street }} {{ data.houseNumber }}{{ data.apartmentNumber ? '/' + data.apartmentNumber : '' }}, 
                     {{ data.zipCode }} {{ data.city }}
                   </div>
+                }
+
+                <div class="text-muted text-uppercase fw-bold small mb-2 mt-4 d-flex justify-content-between align-items-center border-top pt-3">
+                  <span>Konto bankowe</span>
+                  @if (!isEditingBank()) {
+                    <button class="btn btn-sm btn-outline-primary rounded-pill px-3 py-1" (click)="toggleEditBank()">
+                      <i class="bi bi-pencil me-1"></i>Edytuj konto
+                    </button>
+                  }
+                </div>
+
+                @if (isEditingBank()) {
+                  <form [formGroup]="bankForm" class="mt-2 bg-white p-3 rounded-4 shadow-sm border border-primary border-opacity-25 fade-in">
+                    <div class="row g-2">
+                       <div class="col-12">
+                         <label class="form-label small fw-bold text-secondary mb-1">Numer konta <span class="fw-normal text-muted fst-italic">(opcjonalnie)</span></label>
+                         <input formControlName="bankAccount" class="form-control form-control-sm bg-light font-monospace" placeholder="Wpisz 26 cyfr bez spacji" [class.is-invalid]="bankForm.get('bankAccount')?.invalid && bankForm.get('bankAccount')?.touched">
+                         @if (bankForm.get('bankAccount')?.invalid) {
+                             <div class="invalid-feedback" style="font-size: 0.75rem;">Podaj dokładnie 26 cyfr.</div>
+                         }
+                       </div>
+                       <div class="col-12 mt-3 d-flex gap-2 justify-content-end">
+                         <button type="button" class="btn btn-sm btn-light rounded-pill px-3" (click)="toggleEditBank()">Anuluj</button>
+                         <button type="button" class="btn btn-sm btn-primary rounded-pill px-4 shadow-sm" (click)="saveBank()" [disabled]="bankForm.invalid">
+                            <i class="bi bi-save me-1"></i>Zapisz konto
+                         </button>
+                       </div>
+                    </div>
+                  </form>
+                } @else {
                   @if (data.bankAccount) {
                     <div class="fs-6 text-dark mt-2 font-monospace">
                       <i class="bi bi-bank2 text-muted me-2"></i>{{ formatBankAccount(data.bankAccount) }}
@@ -101,11 +124,11 @@ import { EmployeeHistoryEntry } from './employee';
         </div>
       </div>
 
-      <div class="col-md-6 col-12">
+      <div class="col-12">
         <!-- Contracts List -->
         <div class="card shadow border-0 rounded-4 h-100">
           <div class="card-body p-sm-5 p-4">
-            <h4 class="fw-bold text-secondary mb-4 border-bottom pb-3"><i class="bi bi-file-earmark-text text-primary me-2"></i>Związane umowy</h4>
+            <h4 class="fw-bold text-secondary mb-4 border-bottom pb-3"><i class="bi bi-file-earmark-text text-primary me-2"></i>Umowy</h4>
             
             <div class="list-group list-group-flush">
               @for (contract of employeeContracts(); track contract.id) {
@@ -130,7 +153,7 @@ import { EmployeeHistoryEntry } from './employee';
         </div>
       </div>
       
-      <div class="col-md-6 col-12">
+      <div class="col-12">
         <!-- History List -->
         <div class="card shadow border-0 rounded-4 h-100">
           <div class="card-body p-sm-5 p-4">
@@ -144,9 +167,21 @@ import { EmployeeHistoryEntry } from './employee';
                    </div>
                    <div class="fw-bold text-dark mt-2 mb-1 fs-6">{{ entry.field }}</div>
                    <div class="d-flex align-items-center bg-light rounded-3 p-2 small">
-                      <div class="text-muted text-decoration-line-through text-truncate flex-grow-1" style="max-width: 45%;" [title]="entry.oldValue">{{ entry.oldValue }}</div>
+                      <div class="text-muted text-decoration-line-through text-truncate flex-grow-1" style="max-width: 45%;" [title]="entry.oldValue">
+                        @if(entry.field === 'Konto bankowe') {
+                          {{ formatBankAccount(entry.oldValue) }}
+                        } @else {
+                          {{ entry.oldValue }}
+                        }
+                      </div>
                       <i class="bi bi-arrow-right-circle-fill text-success mx-2"></i>
-                      <div class="text-dark fw-semibold text-truncate flex-grow-1 text-end" style="max-width: 45%;" [title]="entry.newValue">{{ entry.newValue }}</div>
+                      <div class="text-dark fw-semibold text-truncate flex-grow-1 text-end" style="max-width: 45%;" [title]="entry.newValue">
+                        @if(entry.field === 'Konto bankowe') {
+                          {{ formatBankAccount(entry.newValue) }}
+                        } @else {
+                          {{ entry.newValue }}
+                        }
+                      </div>
                    </div>
                 </div>
               } @empty {
@@ -189,14 +224,16 @@ export class EmployeeDetailsComponent {
 
   readonly pesel = input<string>();
 
-  isEditing = signal(false);
-  editForm!: FormGroup;
+  isEditingAddress = signal(false);
+  isEditingBank = signal(false);
+  addressForm!: FormGroup;
+  bankForm!: FormGroup;
 
   constructor() {
     effect(() => {
       const emp = this.employee();
-      if (emp && !this.editForm) {
-        this.initForm(emp);
+      if (emp && !this.addressForm) {
+        this.initForms(emp);
       }
     });
   }
@@ -212,41 +249,64 @@ export class EmployeeDetailsComponent {
     return this.contractService.contracts().filter(c => c.pesel === currentPesel);
   });
 
-  initForm(emp: any) {
-     this.editForm = this.fb.group({
-       street: [emp.street, Validators.required],
-       houseNumber: [emp.houseNumber, Validators.required],
-       apartmentNumber: [emp.apartmentNumber],
-       zipCode: [emp.zipCode, [Validators.required, Validators.pattern(/^[0-9]{2}-[0-9]{3}$/)]],
-       city: [emp.city, Validators.required],
-       bankAccount: [emp.bankAccount || '', [Validators.pattern(/^[0-9]{26}$/)]]
-     });
+  initForms(emp: any) {
+    this.addressForm = this.fb.group({
+      street: [emp.street, Validators.required],
+      houseNumber: [emp.houseNumber, Validators.required],
+      apartmentNumber: [emp.apartmentNumber],
+      zipCode: [emp.zipCode, [Validators.required, Validators.pattern(/^[0-9]{2}-[0-9]{3}$/)]],
+      city: [emp.city, Validators.required]
+    });
+    this.bankForm = this.fb.group({
+      bankAccount: [emp.bankAccount || '', [Validators.pattern(/^[0-9]{26}$/)]]
+    });
   }
 
-  toggleEdit() {
-    if (!this.isEditing() && this.employee()) {
-      this.initForm(this.employee());
+  toggleEditAddress() {
+    if (!this.isEditingAddress() && this.employee()) {
+      this.initForms(this.employee());
     }
-    this.isEditing.set(!this.isEditing());
+    this.isEditingAddress.set(!this.isEditingAddress());
   }
 
-  saveChanges() {
-    if (this.editForm.valid) {
+  toggleEditBank() {
+    if (!this.isEditingBank() && this.employee()) {
+      this.initForms(this.employee());
+    }
+    this.isEditingBank.set(!this.isEditingBank());
+  }
+
+  saveAddress() {
+    if (this.addressForm.valid) {
       const emp = this.employee();
       if (emp) {
-        const formValue = this.editForm.value;
-        const normalizedBankAccount = formValue.bankAccount ? formValue.bankAccount : undefined;
-        
         this.employeeService.addOrUpdateEmployee({
           ...emp,
-          ...formValue,
-          bankAccount: normalizedBankAccount
+          ...this.addressForm.value
         });
-        
-        this.isEditing.set(false);
+        this.isEditingAddress.set(false);
       }
     } else {
-      this.editForm.markAllAsTouched();
+      this.addressForm.markAllAsTouched();
+    }
+  }
+
+  saveBank() {
+    if (this.bankForm.valid) {
+      const emp = this.employee();
+      if (emp) {
+        const formValue = this.bankForm.value;
+        const normalizedBankAccount = formValue.bankAccount && formValue.bankAccount.trim() !== '' ? formValue.bankAccount : undefined;
+
+        this.employeeService.addOrUpdateEmployee({
+          ...emp,
+          bankAccount: normalizedBankAccount
+        });
+
+        this.isEditingBank.set(false);
+      }
+    } else {
+      this.bankForm.markAllAsTouched();
     }
   }
 
