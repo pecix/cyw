@@ -195,12 +195,11 @@ interface AddressItem {
                     <div class="col-md-12">
                       <div class="form-floating text-muted">
                         <select formControlName="contractType" class="form-select bg-light border-0" id="contractType" [class.is-invalid]="invalidFields().contractType">
-                          <option value="zlecenie">Umowa zlecenie</option>
-                          <option value="dzielo">Umowa o dzieło</option>
-                          <option value="czas_okreslony">Umowa na czas określony</option>
-                          <option value="czas_nieokreslony">Umowa na czas nieokreślony</option>
-                          <option value="zastepstwo">Umowa na zastępstwo</option>
-                          <option value="kontrakt">Kontrakt</option>
+                          <option value="" disabled selected>Wybierz...</option>
+                          <option value="okres_probny">okres próbny</option>
+                          <option value="czas_okreslony">czas określony</option>
+                          <option value="nieobecnosc">czas usprawiedliwionej nieobecności pracownika w pracy</option>
+                          <option value="wykonanie_pracy">czas wykonania określonej pracy</option>
                         </select>
                         <label for="contractType">Rodzaj umowy</label>
                         <div class="invalid-feedback">Rodzaj umowy jest wymagany</div>
@@ -237,16 +236,55 @@ interface AddressItem {
                   <div class="row g-4">
                     <div class="col-md-12">
                       <div class="form-floating text-muted">
-                        <input formControlName="position" class="form-control bg-light border-0" id="position" placeholder="Stanowisko" [class.is-invalid]="invalidFields().position" />
+                        <select formControlName="legalBasis" class="form-select bg-light border-0" id="legalBasis" [class.is-invalid]="invalidFields().legalBasis">
+                          <option value="" disabled selected>Wybierz...</option>
+                          <option value="rozporzadzenie_rm">Rozporządzenie Rady Ministrów z dnia 2 lutego 2010r. w sprawie zasad wynagradzania pracowników niebędących członkami korpusu służby cywilnej zatrudnionych w urzędach administracji rządowej i pracowników innych jednostek</option>
+                          <option value="rozporzadzenie_ms">Rozporządzenie Ministra Pracy i Polityki Społecznej z dnia 22 kwietnia 2008r. w sprawie warunków wynagradzania za pracę i przyznawania innych świadczeń związanych z pracą dla pracowników zatrudnionych w niektórych jednostkach organizacyjnych resortu sprawiedliwości</option>
+                        </select>
+                        <label for="legalBasis">Podstawa prawna</label>
+                        <div class="invalid-feedback">Podstawa prawna jest wymagana</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating text-muted">
+                        <select formControlName="department" class="form-select bg-light border-0" id="department" [class.is-invalid]="invalidFields().department">
+                          <option value="" disabled selected>Wybierz...</option>
+                          <option value="Finansowy">Finansowy</option>
+                          <option value="Kadrowy">Kadrowy</option>
+                          <option value="Kwatermistrzowski">Kwatermistrzowski</option>
+                          <option value="Ewidencji">Ewidencji</option>
+                          <option value="Ochrony">Ochrony</option>
+                          <option value="Prawny">Prawny</option>
+                          <option value="Informatyki">Informatyki</option>
+                          <option value="Penitencjarny">Penitencjarny</option>
+                        </select>
+                        <label for="department">Dział</label>
+                        <div class="invalid-feedback">Dział jest wymagany</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-floating text-muted">
+                        <select formControlName="position" class="form-select bg-light border-0" id="position" [class.is-invalid]="invalidFields().position">
+                          <option value="" disabled selected>Wybierz...</option>
+                          <option value="Referent">Referent</option>
+                          <option value="Szef kuchni">Szef kuchni</option>
+                          <option value="Nauczyciel">Nauczyciel</option>
+                          <option value="Kapelan">Kapelan</option>
+                          <option value="Sekretarka">Sekretarka</option>
+                          <option value="Inspektor">Inspektor</option>
+                          <option value="Elektryk">Elektryk</option>
+                          <option value="Technik">Technik</option>
+                          <option value="Kucharz">Kucharz</option>
+                        </select>
                         <label for="position">Stanowisko</label>
                         <div class="invalid-feedback">Stanowisko jest wymagane</div>
                       </div>
                     </div>
                     <div class="col-md-6">
                       <div class="form-floating text-muted">
-                        <input formControlName="workingTime" class="form-control bg-light border-0" id="workingTime" placeholder="Wymiar etatu (np. 1/1, 1/2)" [class.is-invalid]="invalidFields().workingTime" />
-                        <label for="workingTime">Wymiar etatu (np. 1/1, 1/2)</label>
-                        <div class="invalid-feedback">Wymiar etatu jest wymagany</div>
+                        <input type="number" step="0.01" min="0" max="1" formControlName="workingTime" class="form-control bg-light border-0" id="workingTime" placeholder="Wymiar etatu (od 0 do 1 np. 0.75)" [class.is-invalid]="invalidFields().workingTime" />
+                        <label for="workingTime">Wymiar etatu (od 0 do 1 np. 0.75)</label>
+                        <div class="invalid-feedback">Wymiar etatu jest wymagany i musi być od 0 do 1</div>
                       </div>
                     </div>
                     <div class="col-md-6">
@@ -320,8 +358,9 @@ interface AddressItem {
                       <div class="p-3 bg-light rounded-4 h-100">
                         <div class="fw-bold text-secondary mb-2 border-bottom pb-2">Warunki Zatrudnienia</div>
                         <div class="small">
-                          Stanowisko: <strong>{{ contractForm.value.contractConditions?.position }}</strong> ({{ contractForm.value.contractConditions?.workingTime }})<br>
-                          Miejsce pracy: {{ contractForm.value.contractConditions?.workplace }}<br>
+                          Podstawa prawna: <strong title="{{ getLegalBasisName(contractForm.value.contractConditions?.legalBasis) }}">{{ getLegalBasisNameShort(contractForm.value.contractConditions?.legalBasis) }}</strong><br>
+                          Dział / Miejsce pracy: {{ contractForm.value.contractConditions?.department }} / {{ contractForm.value.contractConditions?.workplace }}<br>
+                          Stanowisko: <strong>{{ contractForm.value.contractConditions?.position }}</strong> (wymiar: {{ contractForm.value.contractConditions?.workingTime }})<br>
                           Typ: <strong>{{ getTypeName(contractForm.value.contractParams?.contractType) }}</strong><br>
                           Okres: {{ contractForm.value.contractParams?.startDate | date:'dd.MM.yyyy' }} - {{ contractForm.value.contractParams?.endDate | date:'dd.MM.yyyy' }}<br>
                           Data zawarcia: {{ contractForm.value.contractParams?.conclusionDate | date:'dd.MM.yyyy' }}
@@ -410,7 +449,7 @@ export class ContractFormComponent {
     { id: 2, name: 'Dane adresowe', icon: 'bi-house', groupKey: 'addressData' },
     { id: 3, name: 'Parametry umowy', icon: 'bi-file-earmark-text', groupKey: 'contractParams' },
     { id: 4, name: 'Warunki umowy', icon: 'bi-briefcase', groupKey: 'contractConditions' },
-    { id: 5, name: 'Dane wynagrodzenia', icon: 'bi-cash-coin', groupKey: 'remunerationData' },
+    { id: 5, name: 'Wynagrodzenie', icon: 'bi-cash-coin', groupKey: 'remunerationData' },
     { id: 6, name: 'Podsumowanie', icon: 'bi-check2-all', groupKey: null }
   ];
 
@@ -432,43 +471,43 @@ export class ContractFormComponent {
 
     if (employee) {
       addresses.push({
-         street: employee.street,
-         houseNumber: employee.houseNumber,
-         apartmentNumber: employee.apartmentNumber,
-         zipCode: employee.zipCode,
-         city: employee.city,
-         source: 'Obecny adres'
+        street: employee.street,
+        houseNumber: employee.houseNumber,
+        apartmentNumber: employee.apartmentNumber,
+        zipCode: employee.zipCode,
+        city: employee.city,
+        source: 'Obecny adres'
       });
 
       employee.history?.filter(h => h.field === 'Adres korespondencyjny').forEach(h => {
-         [h.oldValue, h.newValue].forEach(val => {
-            if (val) {
-               const parsed = this.parseAddressString(val as string);
-               if (parsed && parsed.street && parsed.city) {
-                  addresses.push({ ...parsed as any, source: `Z historii zmian` });
-               }
+        [h.oldValue, h.newValue].forEach(val => {
+          if (val) {
+            const parsed = this.parseAddressString(val as string);
+            if (parsed && parsed.street && parsed.city) {
+              addresses.push({ ...parsed as any, source: `Z historii zmian` });
             }
-         });
+          }
+        });
       });
     }
 
     contracts.forEach(c => {
-       addresses.push({
-          street: c.street,
-          houseNumber: c.houseNumber,
-          apartmentNumber: c.apartmentNumber,
-          zipCode: c.zipCode,
-          city: c.city,
-          source: `Poprzednia umowa (${c.position})`
-       });
+      addresses.push({
+        street: c.street,
+        houseNumber: c.houseNumber,
+        apartmentNumber: c.apartmentNumber,
+        zipCode: c.zipCode,
+        city: c.city,
+        source: `Poprzednia umowa (${c.position})`
+      });
     });
 
     const unique = new Map<string, AddressItem>();
     addresses.forEach(a => {
-       const key = `${a.street?.trim().toLowerCase()}|${a.houseNumber?.trim().toLowerCase()}|${a.apartmentNumber?.trim().toLowerCase() || ''}|${a.zipCode?.trim().toLowerCase()}|${a.city?.trim().toLowerCase()}`;
-       if (a.street && a.city && !unique.has(key)) {
-          unique.set(key, a);
-       }
+      const key = `${a.street?.trim().toLowerCase()}|${a.houseNumber?.trim().toLowerCase()}|${a.apartmentNumber?.trim().toLowerCase() || ''}|${a.zipCode?.trim().toLowerCase()}|${a.city?.trim().toLowerCase()}`;
+      if (a.street && a.city && !unique.has(key)) {
+        unique.set(key, a);
+      }
     });
 
     return Array.from(unique.values());
@@ -476,39 +515,39 @@ export class ContractFormComponent {
 
   parseAddressString(addressStr: string): Partial<AddressItem> | null {
     try {
-       const str = addressStr.replace('ul. ', '').trim();
-       const parts = str.split(', ');
-       if (parts.length !== 2) return null;
-       const streetAndNumber = parts[0];
-       const zipAndCity = parts[1];
+      const str = addressStr.replace('ul. ', '').trim();
+      const parts = str.split(', ');
+      if (parts.length !== 2) return null;
+      const streetAndNumber = parts[0];
+      const zipAndCity = parts[1];
 
-       const zipCode = zipAndCity.substring(0, 6);
-       const city = zipAndCity.substring(7);
+      const zipCode = zipAndCity.substring(0, 6);
+      const city = zipAndCity.substring(7);
 
-       const lastSpaceIdx = streetAndNumber.lastIndexOf(' ');
-       const street = streetAndNumber.substring(0, lastSpaceIdx);
-       const numbers = streetAndNumber.substring(lastSpaceIdx + 1);
+      const lastSpaceIdx = streetAndNumber.lastIndexOf(' ');
+      const street = streetAndNumber.substring(0, lastSpaceIdx);
+      const numbers = streetAndNumber.substring(lastSpaceIdx + 1);
 
-       let houseNumber = numbers;
-       let apartmentNumber = undefined;
-       if (numbers.includes('/')) {
-          const nParts = numbers.split('/');
-          houseNumber = nParts[0];
-          apartmentNumber = nParts[1];
-       }
-       return { street, houseNumber, apartmentNumber, zipCode, city };
-    } catch(e) {
-       return null;
+      let houseNumber = numbers;
+      let apartmentNumber = undefined;
+      if (numbers.includes('/')) {
+        const nParts = numbers.split('/');
+        houseNumber = nParts[0];
+        apartmentNumber = nParts[1];
+      }
+      return { street, houseNumber, apartmentNumber, zipCode, city };
+    } catch (e) {
+      return null;
     }
   }
 
   selectAddress(address: AddressItem) {
     this.contractForm.get('addressData')?.patchValue({
-        street: address.street,
-        houseNumber: address.houseNumber,
-        apartmentNumber: address.apartmentNumber || '',
-        zipCode: address.zipCode,
-        city: address.city
+      street: address.street,
+      houseNumber: address.houseNumber,
+      apartmentNumber: address.apartmentNumber || '',
+      zipCode: address.zipCode,
+      city: address.city
     });
     this.showAddressSelector.set(false);
   }
@@ -536,14 +575,16 @@ export class ContractFormComponent {
         city: ['', Validators.required],
       }),
       contractParams: this.fb.group({
-        contractType: ['zlecenie', Validators.required],
+        contractType: ['', Validators.required],
         conclusionDate: ['', Validators.required],
         startDate: ['', Validators.required],
-        endDate: ['', Validators.required],
+        endDate: [''],
       }),
       contractConditions: this.fb.group({
+        legalBasis: ['', Validators.required],
+        department: ['', Validators.required],
         position: ['', Validators.required],
-        workingTime: ['', Validators.required],
+        workingTime: [null as any, [Validators.required, Validators.min(0), Validators.max(1)]],
         workplace: ['', Validators.required],
       }),
       remunerationData: this.fb.group({
@@ -560,7 +601,7 @@ export class ContractFormComponent {
       if (birthDate) {
         this.contractForm.get('personalData.birthDate')?.setValue(birthDate, { emitEvent: false });
       }
-      
+
       if (pesel && pesel.length === 11) {
         const employee = this.employeeService.getEmployeeByPesel(pesel);
         if (employee) {
@@ -641,6 +682,8 @@ export class ContractFormComponent {
       startDate: isControlInvalid('contractParams.startDate'),
       endDate: isControlInvalid('contractParams.endDate'),
 
+      legalBasis: isControlInvalid('contractConditions.legalBasis'),
+      department: isControlInvalid('contractConditions.department'),
       position: isControlInvalid('contractConditions.position'),
       workingTime: isControlInvalid('contractConditions.workingTime'),
       workplace: isControlInvalid('contractConditions.workplace'),
@@ -704,12 +747,12 @@ export class ContractFormComponent {
         ...formValue.contractConditions,
         ...formValue.remunerationData
       };
-      
+
       this.employeeService.addOrUpdateEmployee({
         ...formValue.personalData,
         ...formValue.addressData
       });
-      
+
       this.contractService.addContract(contractData);
 
       if (this.currentDraftId) {
@@ -727,14 +770,28 @@ export class ContractFormComponent {
 
   getTypeName(type: string): string {
     const types: Record<string, string> = {
-      'zlecenie': 'Umowa zlecenia',
-      'dzielo': 'Umowa o dzieło',
-      'czas_okreslony': 'Umowa na czas określony',
-      'czas_nieokreslony': 'Umowa na czas nieokreślony',
-      'zastepstwo': 'Umowa na zastępstwo',
-      'kontrakt': 'Kontrakt'
+      'okres_probny': 'okres próbny',
+      'czas_okreslony': 'czas określony',
+      'nieobecnosc': 'czas usprawiedliwionej nieobecności pracownika w pracy',
+      'wykonanie_pracy': 'czas wykonania określonej pracy'
     };
     return types[type] || type;
+  }
+
+  getLegalBasisName(code: string): string {
+    const map: Record<string, string> = {
+      'rozporzadzenie_rm': 'Rozporządzenie Rady Ministrów z dnia 2 lutego 2010r. w sprawie zasad wynagradzania pracowników niebędących członkami korpusu służby cywilnej zatrudnionych w urzędach administracji rządowej i pracowników innych jednostek',
+      'rozporzadzenie_ms': 'Rozporządzenie Ministra Pracy i Polityki Społecznej z dnia 22 kwietnia 2008r. w sprawie warunków wynagradzania za pracę i przyznawania innych świadczeń związanych z pracą dla pracowników zatrudnionych w niektórych jednostkach organizacyjnych resortu sprawiedliwości'
+    };
+    return map[code] || code;
+  }
+
+  getLegalBasisNameShort(code: string): string {
+    const map: Record<string, string> = {
+      'rozporzadzenie_rm': 'Rozporządzenie RM (z 2 lutego 2010r.)',
+      'rozporzadzenie_ms': 'Rozporządzenie MS (z 22 kwietnia 2008r.)'
+    };
+    return map[code] || code;
   }
 
   private extractBirthDateFromPesel(pesel: string): string | null {

@@ -98,24 +98,20 @@ export class ContractListComponent {
 
   getTypeName(type: string): string {
     const types: Record<string, string> = {
-      'zlecenie': 'Zlecenie',
-      'dzielo': 'O Dzieło',
-      'czas_okreslony': 'Czas Określony',
-      'czas_nieokreslony': 'Czas Nieokreślony',
-      'zastepstwo': 'Zastępstwo',
-      'kontrakt': 'Kontrakt'
+      'okres_probny': 'okres próbny',
+      'czas_okreslony': 'czas określony',
+      'nieobecnosc': 'uspraw. nieobecność',
+      'wykonanie_pracy': 'wykonanie pracy'
     };
     return types[type] || type;
   }
 
   getBadgeClass(type: string): string {
     const classes: Record<string, string> = {
-      'zlecenie': 'bg-info text-dark',
-      'dzielo': 'bg-success',
+      'okres_probny': 'bg-info text-dark',
       'czas_okreslony': 'bg-primary',
-      'czas_nieokreslony': 'bg-secondary',
-      'zastepstwo': 'bg-warning text-dark',
-      'kontrakt': 'bg-danger'
+      'nieobecnosc': 'bg-warning text-dark',
+      'wykonanie_pracy': 'bg-success'
     };
     return classes[type] || 'bg-light text-dark';
   }

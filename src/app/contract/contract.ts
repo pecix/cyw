@@ -11,8 +11,10 @@ export interface Contract {
     city: string;
     contractType: string;
     conclusionDate: string;
+    legalBasis: string;
+    department: string;
     position: string;
-    workingTime: string;
+    workingTime: number;
     workplace: string;
     rate: number;
     seniorityAllowance: number;

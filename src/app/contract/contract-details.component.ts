@@ -47,17 +47,25 @@ import { Contract } from './contract';
               </div>
               <div class="col-12 mt-4 pt-3 border-top">
                 <div class="row">
-                  <div class="col-md-4 mb-3 mb-md-0">
+                  <div class="col-md-3 mb-3 mb-md-0">
+                    <div class="text-muted text-uppercase fw-bold small">Dział</div>
+                    <div class="fs-5">{{ data.department }}</div>
+                  </div>
+                  <div class="col-md-3 mb-3 mb-md-0">
                     <div class="text-muted text-uppercase fw-bold small">Stanowisko</div>
                     <div class="fs-5">{{ data.position }}</div>
                   </div>
-                  <div class="col-md-4 mb-3 mb-md-0">
+                  <div class="col-md-3 mb-3 mb-md-0">
                     <div class="text-muted text-uppercase fw-bold small">Dodatek funkcyjny</div>
                     <div class="fs-5">{{ data.functionalAllowance | currency:'PLN':'symbol':'1.2-2' }}</div>
                   </div>
-                  <div class="col-md-4">
+                  <div class="col-md-3">
                     <div class="text-muted text-uppercase fw-bold small">Dodatek stażowy</div>
                     <div class="fs-5">{{ data.seniorityAllowance }}%</div>
+                  </div>
+                  <div class="col-12 mt-3">
+                    <div class="text-muted text-uppercase fw-bold small">Podstawa prawna</div>
+                    <div class="small fw-semibold">{{ getLegalBasisName(data.legalBasis) }}</div>
                   </div>
                 </div>
               </div>
@@ -184,25 +192,29 @@ export class ContractDetailsComponent {
 
   getTypeName(type: string): string {
     const types: Record<string, string> = {
-      'zlecenie': 'Zlecenie',
-      'dzielo': 'O Dzieło',
-      'czas_okreslony': 'Czas Określony',
-      'czas_nieokreslony': 'Czas Nieokreślony',
-      'zastepstwo': 'Zastępstwo',
-      'kontrakt': 'Kontrakt'
+      'okres_probny': 'okres próbny',
+      'czas_okreslony': 'czas określony',
+      'nieobecnosc': 'uspraw. nieobecność',
+      'wykonanie_pracy': 'wykonanie pracy'
     };
     return types[type] || type;
   }
 
   getBadgeClass(type: string): string {
     const classes: Record<string, string> = {
-      'zlecenie': 'bg-info text-dark',
-      'dzielo': 'bg-success',
+      'okres_probny': 'bg-info text-dark',
       'czas_okreslony': 'bg-primary',
-      'czas_nieokreslony': 'bg-secondary',
-      'zastepstwo': 'bg-warning text-dark',
-      'kontrakt': 'bg-danger'
+      'nieobecnosc': 'bg-warning text-dark',
+      'wykonanie_pracy': 'bg-success'
     };
     return classes[type] || 'bg-light text-dark';
+  }
+
+  getLegalBasisName(code: string): string {
+    const map: Record<string, string> = {
+      'rozporzadzenie_rm': 'Rozporządzenie Rady Ministrów z dnia 2 lutego 2010r. w sprawie zasad wynagradzania pracowników niebędących członkami korpusu służby cywilnej zatrudnionych w urzędach administracji rządowej i pracowników innych jednostek',
+      'rozporzadzenie_ms': 'Rozporządzenie Ministra Pracy i Polityki Społecznej z dnia 22 kwietnia 2008r. w sprawie warunków wynagradzania za pracę i przyznawania innych świadczeń związanych z pracą dla pracowników zatrudnionych w niektórych jednostkach organizacyjnych resortu sprawiedliwości'
+    };
+    return map[code] || code;
   }
 }
