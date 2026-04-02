@@ -5,6 +5,7 @@ import { EmployeeService } from './service/employee.service';
 import { ContractService } from '../contract/service/contract.service';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { EmployeeHistoryEntry } from './employee';
+import { AuthService } from '../auth/auth.service';
 
 @Component({
   selector: 'app-employee-details',
@@ -14,9 +15,11 @@ import { EmployeeHistoryEntry } from './employee';
     @if (employee(); as data) {
     <div class="row g-4 fade-in">
       <div class="col-12 mb-2">
-        <button class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm" (click)="goBack()">
-          <i class="bi bi-arrow-left me-2"></i>Wróć
-        </button>
+        @if (auth.userRole() !== 'EMPLOYEE') {
+          <button class="btn btn-outline-secondary px-4 py-2 rounded-pill fw-semibold shadow-sm" (click)="goBack()">
+            <i class="bi bi-arrow-left me-2"></i>Wróć
+          </button>
+        }
       </div>
 
       <!-- Employee Header -->
@@ -94,7 +97,7 @@ import { EmployeeHistoryEntry } from './employee';
                     <div class="row g-2">
                        <div class="col-12">
                          <label class="form-label small fw-bold text-secondary mb-1">Numer konta <span class="fw-normal text-muted fst-italic">(opcjonalnie)</span></label>
-                         <input formControlName="bankAccount" class="form-control form-control-sm bg-light font-monospace" placeholder="Wpisz 26 cyfr bez spacji" [class.is-invalid]="bankForm.get('bankAccount')?.invalid && bankForm.get('bankAccount')?.touched">
+                         <input formControlName="bankAccount" class="form-control form-control-sm bg-light font-monospace" maxlength="26" placeholder="Wpisz 26 cyfr bez spacji" [class.is-invalid]="bankForm.get('bankAccount')?.invalid && bankForm.get('bankAccount')?.touched">
                          @if (bankForm.get('bankAccount')?.invalid) {
                              <div class="invalid-feedback" style="font-size: 0.75rem;">Podaj dokładnie 26 cyfr.</div>
                          }
@@ -221,6 +224,7 @@ export class EmployeeDetailsComponent {
   private employeeService = inject(EmployeeService);
   private contractService = inject(ContractService);
   private fb = inject(FormBuilder);
+  protected auth = inject(AuthService);
 
   readonly pesel = input<string>();
 

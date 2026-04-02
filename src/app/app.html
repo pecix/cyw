@@ -3,34 +3,41 @@
     <a class="navbar-brand mb-0 h1 fw-bold cursor-pointer" routerLink="/">
       <i class="bi bi-people-fill"></i> Portal Pracowniczy
     </a>
-    <button class="navbar-toggler" type="button" (click)="isMenuOpen.set(!isMenuOpen())"
-      [attr.aria-expanded]="isMenuOpen()" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" [class.show]="isMenuOpen()" id="navbarNav">
-      <ul class="navbar-nav ms-auto font-weight-bold">
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/nowa-umowa" routerLinkActive="active" (click)="isMenuOpen.set(false)">
-            <i class="bi bi-file-earmark-plus me-1"></i>Nowa umowa
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/drafts" routerLinkActive="active" (click)="isMenuOpen.set(false)">
-            <i class="bi bi-pencil-square me-1"></i>Szkice umów
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/umowy" routerLinkActive="active" (click)="isMenuOpen.set(false)">
-            <i class="bi bi-file-earmark-check me-1"></i>Podpisane umowy
-          </a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/pracownicy" routerLinkActive="active" (click)="isMenuOpen.set(false)">
-            <i class="bi bi-person-vcard me-1"></i>Pracownicy
-          </a>
-        </li>
-      </ul>
-    </div>
+    @if (showNavbarOptions()) {
+      <button class="navbar-toggler" type="button" (click)="isMenuOpen.set(!isMenuOpen())"
+        [attr.aria-expanded]="isMenuOpen()" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" [class.show]="isMenuOpen()" id="navbarNav">
+        <ul class="navbar-nav ms-auto font-weight-bold">
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/nowa-umowa" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+              <i class="bi bi-file-earmark-plus me-1"></i>Nowa umowa
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/drafts" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+              <i class="bi bi-pencil-square me-1"></i>Szkice umów
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/umowy" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+              <i class="bi bi-file-earmark-check me-1"></i>Podpisane umowy
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" routerLink="/pracownicy" routerLinkActive="active" (click)="isMenuOpen.set(false)">
+              <i class="bi bi-person-vcard me-1"></i>Pracownicy
+            </a>
+          </li>
+        </ul>
+      </div>
+    }
+    @if (auth.userRole() !== null) {
+      <button class="btn btn-sm btn-outline-light ms-3 d-none d-lg-block" (click)="logoutMock()">
+        Wyloguj <i class="bi bi-box-arrow-right ms-1"></i>
+      </button>
+    }
   </div>
 </nav>
 
