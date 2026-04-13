@@ -44,6 +44,9 @@ import { Contract } from './contract';
               <div class="col-md-4">
                 <div class="text-muted text-uppercase fw-bold small">Stawka brutto</div>
                 <div class="fs-4 fw-bold text-success">{{ data.rate | currency:'PLN':'symbol':'1.2-2' }}</div>
+                @if (data.rateCategory) {
+                  <div class="text-success opacity-75 small fw-semibold">Kategoria {{ data.rateCategory }}</div>
+                }
               </div>
               <div class="col-12 mt-4 pt-3 border-top">
                 <div class="row">
@@ -58,6 +61,11 @@ import { Contract } from './contract';
                   <div class="col-md-3 mb-3 mb-md-0">
                     <div class="text-muted text-uppercase fw-bold small">Dodatek funkcyjny</div>
                     <div class="fs-5">{{ data.functionalAllowance | currency:'PLN':'symbol':'1.2-2' }}</div>
+                    @if (data.functionalAllowanceCategory && data.functionalAllowanceCategory !== 'none') {
+                      <div class="text-muted small">Stawka {{ data.functionalAllowanceCategory }}</div>
+                    } @else {
+                      <div class="text-muted small">Brak</div>
+                    }
                   </div>
                   <div class="col-md-3">
                     <div class="text-muted text-uppercase fw-bold small">Dodatek stażowy</div>
@@ -147,7 +155,7 @@ import { Contract } from './contract';
     @media print {
       :host {
         display: block;
-        width: 100%;
+        width: 75%;
       }
       .card {
         border: none !important;

@@ -16,8 +16,10 @@ export interface Contract {
     position: string;
     workingTime: number;
     workplace: string;
+    rateCategory: string;
     rate: number;
     seniorityAllowance: number;
+    functionalAllowanceCategory: string;
     functionalAllowance: number;
     startDate: string;
     endDate: string;

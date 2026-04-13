@@ -302,11 +302,58 @@ interface AddressItem {
                 @if (currentStep() === 5) {
                 <div formGroupName="remunerationData" class="fade-in">
                   <div class="row g-4">
-                    <div class="col-md-4">
+                    <div class="col-md-6">
+                      <div class="form-floating text-muted">
+                        <select formControlName="rateCategory" class="form-select bg-light border-0" id="rateCategory" [class.is-invalid]="invalidFields().rateCategory">
+                          <option value="" disabled selected>Wybierz...</option>
+                          @for (cat of SALARY_CATEGORIES; track cat.category) {
+                            <option [value]="cat.category">Kat. {{ cat.category }} ({{ cat.min }} - {{ cat.max }} PLN)</option>
+                          }
+                        </select>
+                        <label for="rateCategory">Kategoria zaszeregowania</label>
+                        <div class="invalid-feedback">Kategoria jest wymagana</div>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
                       <div class="form-floating text-muted">
                         <input type="number" formControlName="rate" class="form-control bg-light border-0" id="rate" placeholder="Stawka brutto (PLN)" [class.is-invalid]="invalidFields().rate" />
-                        <label for="rate">Stawka brutto (PLN)</label>
-                        <div class="invalid-feedback">Stawka jest wymagana i dodatnia</div>
+                        <label for="rate">Wynagrodzenie zasadnicze (PLN)</label>
+                        <div class="invalid-feedback">
+                          @if (contractForm.get('remunerationData.rate')?.errors?.['min'] || contractForm.get('remunerationData.rate')?.errors?.['max']) {
+                            Wartość musi być z zakresu wybranej kategorii
+                          } @else {
+                            Stawka jest wymagana
+                          }
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="col-md-12 my-2"><hr class="text-muted opacity-25"></div>
+
+                    <div class="col-md-4">
+                      <div class="form-floating text-muted">
+                        <select formControlName="functionalAllowanceCategory" class="form-select bg-light border-0" id="functionalAllowanceCategory" [class.is-invalid]="invalidFields().functionalAllowanceCategory">
+                          <option value="" disabled selected>Brak / Wybierz...</option>
+                          <option value="none">Brak dodatku</option>
+                          @for (cat of FUNCTIONAL_ALLOWANCE_CATEGORIES; track cat.category) {
+                            <option [value]="cat.category">Stawka {{ cat.category }} (do {{ cat.max }} PLN)</option>
+                          }
+                        </select>
+                        <label for="functionalAllowanceCategory">Dodatek funkcyjny - stawka</label>
+                        <div class="invalid-feedback">Wybór jest wymagany</div>
+                      </div>
+                    </div>
+                    <div class="col-md-4">
+                      <div class="form-floating text-muted">
+                        <input type="number" formControlName="functionalAllowance" class="form-control bg-light border-0" id="functionalAllowance" placeholder="Dodatek funkcyjny" [class.is-invalid]="invalidFields().functionalAllowance" />
+                        <label for="functionalAllowance">Dodatek funkcyjny (PLN)</label>
+                        <div class="invalid-feedback">
+                          @if (contractForm.get('remunerationData.functionalAllowance')?.errors?.['max']) {
+                            Wartość przekracza górną granicę wybranej stawki
+                          } @else {
+                            Dodatek jest wymagany (wpisz 0 dla braku)
+                          }
+                        </div>
                       </div>
                     </div>
                     <div class="col-md-4">
@@ -314,13 +361,6 @@ interface AddressItem {
                         <input type="number" formControlName="seniorityAllowance" class="form-control bg-light border-0" id="seniorityAllowance" placeholder="Dodatek stażowy (%)" [class.is-invalid]="invalidFields().seniorityAllowance" />
                         <label for="seniorityAllowance">Dodatek stażowy (%)</label>
                         <div class="invalid-feedback">Wartość musi być między 0 a 100</div>
-                      </div>
-                    </div>
-                    <div class="col-md-4">
-                      <div class="form-floating text-muted">
-                        <input type="number" formControlName="functionalAllowance" class="form-control bg-light border-0" id="functionalAllowance" placeholder="Dodatek funkcyjny" [class.is-invalid]="invalidFields().functionalAllowance" />
-                        <label for="functionalAllowance">Dodatek funkcyjny (PLN)</label>
-                        <div class="invalid-feedback">Wartość musi być dodatnia</div>
                       </div>
                     </div>
                   </div>
@@ -368,12 +408,25 @@ interface AddressItem {
                       </div>
                     </div>
                     <div class="col-12">
-                      <div class="p-3 bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 p-4 text-center">
+                      <div class="p-4 bg-success bg-opacity-10 border border-success border-opacity-25 rounded-4 text-center">
                         <div class="text-success text-uppercase fw-bold small mb-1">Wynagrodzenie i Finanse</div>
-                        <div class="display-6 fw-bold text-success mb-2">{{ contractForm.value.remunerationData?.rate | currency:'PLN':'symbol':'1.2-2' }}</div>
-                        <div class="fs-5 text-muted mb-3">
-                          + {{ contractForm.value.remunerationData?.seniorityAllowance }}% dodatku stażowego<br>
-                          + {{ contractForm.value.remunerationData?.functionalAllowance | currency:'PLN':'symbol':'1.2-2' }} dodatku funkcyjnego
+                        <div class="display-6 fw-bold text-success mb-0">{{ contractForm.value.remunerationData?.rate | currency:'PLN':'symbol':'1.2-2' }}</div>
+                        <div class="text-success opacity-75 small fw-semibold mb-3">Kategoria {{ contractForm.value.remunerationData?.rateCategory }}</div>
+                        
+                        <div class="fs-6 text-muted mb-0 mx-md-4 d-flex flex-column gap-2 text-start">
+                          <div class="d-flex justify-content-between border-bottom border-success border-opacity-10 pb-2">
+                             <span>Dodatek stażowy:</span>
+                             <span class="fw-semibold text-dark">{{ contractForm.value.remunerationData?.seniorityAllowance }}%</span>
+                          </div>
+                          <div class="d-flex justify-content-between pt-1">
+                             <span>Dodatek funkcyjny:</span>
+                             <span class="fw-semibold text-dark text-end">
+                               {{ contractForm.value.remunerationData?.functionalAllowance | currency:'PLN':'symbol':'1.2-2' }}
+                               @if (contractForm.value.remunerationData?.functionalAllowanceCategory !== 'none') {
+                                 <br><small class="text-muted fw-normal" style="font-size: 0.8rem;">(Stawka {{ contractForm.value.remunerationData?.functionalAllowanceCategory }})</small>
+                               }
+                             </span>
+                          </div>
                         </div>
                       </div>
                     </div>
@@ -441,6 +494,45 @@ interface AddressItem {
   `]
 })
 export class ContractFormComponent {
+  SALARY_CATEGORIES = [
+    { category: 'I', min: 2360, max: 4666 },
+    { category: 'II', min: 2410, max: 4670 },
+    { category: 'III', min: 2460, max: 4680 },
+    { category: 'IV', min: 2520, max: 4720 },
+    { category: 'V', min: 2570, max: 4740 },
+    { category: 'VI', min: 2630, max: 4760 },
+    { category: 'VII', min: 2680, max: 4840 },
+    { category: 'VIII', min: 2730, max: 4980 },
+    { category: 'IX', min: 2800, max: 5020 },
+    { category: 'X', min: 3010, max: 5150 },
+    { category: 'XI', min: 3110, max: 5300 },
+    { category: 'XII', min: 3220, max: 5450 },
+    { category: 'XIII', min: 3340, max: 5640 },
+    { category: 'XIV', min: 3580, max: 5820 },
+    { category: 'XV', min: 3720, max: 6000 },
+    { category: 'XVI', min: 3870, max: 6420 },
+    { category: 'XVII', min: 4190, max: 6930 },
+    { category: 'XVIII', min: 4500, max: 7520 },
+    { category: 'XIX', min: 4730, max: 8220 },
+    { category: 'XX', min: 5060, max: 9360 },
+    { category: 'XXI', min: 10090, max: 12560 },
+    { category: 'XXII', min: 11190, max: 13660 }
+  ];
+
+  FUNCTIONAL_ALLOWANCE_CATEGORIES = [
+    { category: '1', max: 360 },
+    { category: '2', max: 510 },
+    { category: '3', max: 660 },
+    { category: '4', max: 820 },
+    { category: '5', max: 970 },
+    { category: '6', max: 1120 },
+    { category: '7', max: 1280 },
+    { category: '8', max: 1530 },
+    { category: '9', max: 1790 },
+    { category: '10', max: 2040 },
+    { category: '11', max: 2290 }
+  ];
+
   currentStep = signal(1);
   contractForm: FormGroup;
 
@@ -588,13 +680,39 @@ export class ContractFormComponent {
         workplace: ['', Validators.required],
       }),
       remunerationData: this.fb.group({
+        rateCategory: ['', Validators.required],
         rate: [null as any, [Validators.required, Validators.min(0)]],
         seniorityAllowance: [0, [Validators.required, Validators.min(0), Validators.max(100)]],
+        functionalAllowanceCategory: ['', Validators.required],
         functionalAllowance: [0, [Validators.required, Validators.min(0)]],
       })
     });
 
     this.formEvents = toSignal(this.contractForm.valueChanges);
+
+    this.contractForm.get('remunerationData.rateCategory')?.valueChanges.subscribe(category => {
+      const catData = this.SALARY_CATEGORIES.find(c => c.category === category);
+      const rateControl = this.contractForm.get('remunerationData.rate');
+      if (catData && rateControl) {
+        rateControl.setValidators([Validators.required, Validators.min(catData.min), Validators.max(catData.max)]);
+        rateControl.updateValueAndValidity({ emitEvent: false });
+      }
+    });
+
+    this.contractForm.get('remunerationData.functionalAllowanceCategory')?.valueChanges.subscribe(category => {
+      const allowanceControl = this.contractForm.get('remunerationData.functionalAllowance');
+      if (category === 'none') {
+        allowanceControl?.setValue(0);
+        allowanceControl?.setValidators([Validators.required, Validators.min(0), Validators.max(0)]);
+        allowanceControl?.updateValueAndValidity({ emitEvent: false });
+      } else {
+        const catData = this.FUNCTIONAL_ALLOWANCE_CATEGORIES.find(c => c.category === category);
+        if (catData && allowanceControl) {
+          allowanceControl.setValidators([Validators.required, Validators.min(0), Validators.max(catData.max)]);
+          allowanceControl.updateValueAndValidity({ emitEvent: false });
+        }
+      }
+    });
 
     this.contractForm.get('personalData.pesel')?.valueChanges.subscribe(pesel => {
       const birthDate = this.extractBirthDateFromPesel(pesel);
@@ -688,8 +806,10 @@ export class ContractFormComponent {
       workingTime: isControlInvalid('contractConditions.workingTime'),
       workplace: isControlInvalid('contractConditions.workplace'),
 
+      rateCategory: isControlInvalid('remunerationData.rateCategory'),
       rate: isControlInvalid('remunerationData.rate'),
       seniorityAllowance: isControlInvalid('remunerationData.seniorityAllowance'),
+      functionalAllowanceCategory: isControlInvalid('remunerationData.functionalAllowanceCategory'),
       functionalAllowance: isControlInvalid('remunerationData.functionalAllowance'),
     };
   });
